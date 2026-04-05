@@ -1,0 +1,46 @@
+"""
+[학습 기록] 파이썬 문자열(String)과 리스트(List)의 차이 및 활용
+
+1. 발생했던 에러:
+   - my_string[cnt] = x  --> TypeError: 'str' object does not support item assignment
+   - 원인: 파이썬의 문자열은 'Immutable(불변)' 객체라 인덱스로 직접 값을 바꿀 수 없음.
+
+2. 해결 방법:
+   - 방법 A (슬라이싱): 문자열을 필요한 부분만큼 잘라서 이어 붙이기 (가장 효율적)
+   - 방법 B (리스트 변환): 문자열을 리스트로 변환(Mutable)하여 수정 후 다시 문자열로 합치기
+
+3. 핵심 비교:
+   ----------------------------------------------------------
+   구분       |  문자열 (String)         |  리스트 (List)
+   ----------------------------------------------------------
+   가변성     |  불변 (Immutable)        |  가변 (Mutable)
+   수정 방법  |  슬라이싱 등으로 재조합   |  인덱스로 직접 수정 가능
+   저장 타입  |  텍스트(문자) 전용        |  모든 타입(숫자, 객체 등)
+   ----------------------------------------------------------
+"""
+
+# 방법 1: 슬라이싱 활용 (권장 방식)
+def solution_slicing(my_string, overwrite_string, s):
+    # s 인덱스 전까지 + 덮어쓸 문자열 + 덮어쓰기 끝난 지점 이후 문자열
+    answer = my_string[:s] + overwrite_string + my_string[s + len(overwrite_string):]
+    return answer
+
+# 방법 2: 리스트 변환 활용 (반복문 사용 시)
+def solution_list(my_string, overwrite_string, s):
+    # 1. 수정을 위해 리스트로 변환
+    str_list = list(my_string)
+    
+    # 2. 리스트는 가변(Mutable)이므로 인덱스 수정 가능
+    for i in range(len(overwrite_string)):
+        str_list[s + i] = overwrite_string[i]
+    
+    # 3. 리스트를 다시 문자열로 결합
+    return "".join(str_list)
+
+# 테스트 실행
+example_str = "HeWorld"
+overwrite = "llo"
+start_idx = 2
+
+print(f"결과(슬라이싱): {solution_slicing(example_str, overwrite, start_idx)}")
+print(f"결과(리스트변환): {solution_list(example_str, overwrite, start_idx)}")
